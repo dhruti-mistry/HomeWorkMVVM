@@ -7,7 +7,7 @@ import com.imaginato.homeworkmvvm.exts.printLog
 
 
 abstract class BaseViewModel : ViewModel() {
-
+    val mProgress : MutableLiveData<String?> = MutableLiveData()
     val mError : MutableLiveData<String?> = MutableLiveData()
     val isUnauthorized : MutableLiveData<Boolean> = MutableLiveData()
     init {

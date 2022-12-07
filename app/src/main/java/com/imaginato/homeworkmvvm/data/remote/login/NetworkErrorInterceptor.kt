@@ -1,11 +1,9 @@
 package com.imaginato.homeworkmvvm.data.remote.login
 
-import android.accounts.NetworkErrorException
-import android.content.Context
 import android.text.TextUtils
 import com.google.gson.Gson
 import com.google.gson.JsonSyntaxException
-import com.imaginato.homeworkmvvm.ui.base.IApp
+import com.imaginato.homeworkmvvm.BuildConfig
 import com.imaginato.homeworkmvvm.ui.util.isNetworkAvailable
 import okhttp3.Interceptor
 import okhttp3.Response
@@ -20,17 +18,16 @@ class NetworkErrorInterceptor constructor(
             val errorBody = ErrorResponse()
             errorBody.code = 300
             errorBody.message = noNetworkMessage
-            throw LoginHttpException.NetWorkExceptionMaximon(errorBody)
+            throw TaskHttpException.NetWorkException(errorBody)
         }
         val request =
             chain.request().newBuilder()
-                .header("IMSI", "357175048449937")
-                .header("IMEI", "510110406068589")
+                .header("IMSI", BuildConfig.IMSI)
+                .header("IMEI", BuildConfig.IMEI)
                 .build()
 
 
         val response = request.let { chain.proceed(it) }
-            ?: throw NetworkErrorException("Null response")
 
         return if (response.isSuccessful) {
             response
@@ -44,8 +41,8 @@ class NetworkErrorInterceptor constructor(
                 errorBody = ErrorResponse()
                 errorBody.code = response.code
                 when {
-                    (response.code == LoginHttpException.CODE_UNAUTHORIZED) ||
-                            (response.code == LoginHttpException.CODE_AUTHORIZED_TIMEOUT) -> {
+                    (response.code == TaskHttpException.CODE_UNAUTHORIZED) ||
+                            (response.code == TaskHttpException.CODE_AUTHORIZED_TIMEOUT) -> {
                         errorBody.statusType = UNAUTHORIZED
                     }
                     TextUtils.isEmpty(response.message) -> {
@@ -59,8 +56,8 @@ class NetworkErrorInterceptor constructor(
                 errorBody = ErrorResponse()
                 errorBody.code = response.code
                 when {
-                    (response.code == LoginHttpException.CODE_UNAUTHORIZED) ||
-                            (response.code == LoginHttpException.CODE_AUTHORIZED_TIMEOUT) -> {
+                    (response.code == TaskHttpException.CODE_UNAUTHORIZED) ||
+                            (response.code == TaskHttpException.CODE_AUTHORIZED_TIMEOUT) -> {
                         errorBody.message = UNAUTHORIZED
                     }
                     TextUtils.isEmpty(response.message) -> {
@@ -71,34 +68,34 @@ class NetworkErrorInterceptor constructor(
                     }
                 }
             }
-            throw createMaximonException(response.code, errorBody)
+            throw createException(response.code, errorBody)
         }
     }
 
-    private fun createMaximonException(code: Int, errorBody: ErrorResponse): LoginHttpException {
+    private fun createException(code: Int, errorBody: ErrorResponse): TaskHttpException {
         return when (code) {
-            LoginHttpException.CODE_BAD_REQUEST -> LoginHttpException.BadRequestExceptionMaximon(
+            TaskHttpException.CODE_BAD_REQUEST -> TaskHttpException.BadRequestException(
                 errorBody
             )
-            LoginHttpException.CODE_NOT_FOUND -> LoginHttpException.NotFoundExceptionMaximon(
+            TaskHttpException.CODE_NOT_FOUND -> TaskHttpException.NotFoundException(
                 errorBody
             )
-            LoginHttpException.CODE_UNAUTHORIZED -> LoginHttpException.UnauthorizedExceptionMaximon(
+            TaskHttpException.CODE_UNAUTHORIZED -> TaskHttpException.UnauthorizedException(
                 errorBody
             )
-            LoginHttpException.CODE_AUTHORIZED_TIMEOUT -> LoginHttpException.UnauthorizedExceptionMaximon(
+            TaskHttpException.CODE_AUTHORIZED_TIMEOUT -> TaskHttpException.UnauthorizedException(
                 errorBody
             )
-            LoginHttpException.CODE_FORBIDDEN -> LoginHttpException.ForbiddenExceptionMaximon(
+            TaskHttpException.CODE_FORBIDDEN -> TaskHttpException.ForbiddenException(
                 errorBody
             )
-            LoginHttpException.CODE_UNPROCESS_ABLE -> LoginHttpException.UnprocessedAbleExceptionMaximon(
+            TaskHttpException.CODE_UNPROCESS_ABLE -> TaskHttpException.UnprocessedAbleException(
                 errorBody
             )
-            LoginHttpException.CODE_SERVER_ERROR -> LoginHttpException.ServerExceptionMaximon(
+            TaskHttpException.CODE_SERVER_ERROR -> TaskHttpException.ServerException(
                 errorBody
             )
-            else -> LoginHttpException(errorBody)
+            else -> TaskHttpException(errorBody)
         }
     }
 

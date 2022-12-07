@@ -1,13 +1,20 @@
 package com.imaginato.homeworkmvvm.domain
 
+import android.content.Context
+import androidx.room.Room
+import androidx.room.migration.Migration
+import androidx.sqlite.db.SupportSQLiteDatabase
 import com.google.gson.Gson
+import com.imaginato.homeworkmvvm.BuildConfig
 import com.imaginato.homeworkmvvm.R
+import com.imaginato.homeworkmvvm.data.local.login.UserDatabase
 import com.imaginato.homeworkmvvm.data.remote.login.LoginApi
 import com.imaginato.homeworkmvvm.data.remote.login.NetworkErrorInterceptor
 import com.imaginato.homeworkmvvm.ui.base.IApp
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -42,7 +49,7 @@ object IModule {
     @Provides
     fun provideApiUserInterface(retrofitClient: OkHttpClient.Builder): LoginApi =
         Retrofit.Builder()
-            .baseUrl("https://private-222d3-homework5.apiary-mock.com/api/")
+            .baseUrl(BuildConfig.API_BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .client(getOkHttpClient(retrofitClient))
             .build().create(LoginApi::class.java)
@@ -66,31 +73,16 @@ object IModule {
             ), gson
         )
 
+    @Singleton
+    @Provides
+    fun provideYourDatabase(
+        @ApplicationContext app: Context
+    ) = Room.databaseBuilder(
+        app, UserDatabase::class.java,
+        "USER_DATABASE"
+    ).allowMainThreadQueries().build()
 
-//    @Singleton
-//    @Provides
-//    fun provideYourDatabase(
-//        @ApplicationContext app: Context
-//    ) = Room.databaseBuilder(
-//        app, SantaDatabase::class.java,
-//        AppConstant.DB_NAME
-//    ).addMigrations(MIGRATION_1_2, MIGRATION_2_3).allowMainThreadQueries().build()
-//
-//    val MIGRATION_1_2: Migration = object : Migration(1, 2) {
-//        override fun migrate(database: SupportSQLiteDatabase) {
-//            database.execSQL("ALTER TABLE UsersTicket ADD COLUMN CardHolderName TEXT")
-//            database.execSQL("ALTER TABLE UsersTicket ADD COLUMN CreditCardLast4 TEXT")
-//            database.execSQL("ALTER TABLE UsersTicket ADD COLUMN DateOfPurchase TEXT")
-//        }
-//    }
-//
-//    val MIGRATION_2_3: Migration = object : Migration(2, 3) {
-//        override fun migrate(database: SupportSQLiteDatabase) {
-//            database.execSQL("ALTER TABLE UsersTicket ADD COLUMN PlanName TEXT")
-//        }
-//    }
-//
-//    @Singleton
-//    @Provides
-//    fun provideUserDao(db: SantaDatabase) = db.getUserDao()
+    @Singleton
+    @Provides
+    fun provideUserDao(db: UserDatabase) = db.userDao
 }

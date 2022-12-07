@@ -1,12 +1,13 @@
 package com.imaginato.homeworkmvvm.data.local.login
 
-import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-@Entity(tableName = "Demo")
-data class User constructor(
+@Entity(tableName = "User")
+data class User(
     @PrimaryKey
-    val id: Long,
-    @ColumnInfo(name = "name") var name: String
+    val userId: String,
+    val xAcc: String? = null,
+    var userName: String? = null,
+    var isDeleted: Boolean? = null
 )
