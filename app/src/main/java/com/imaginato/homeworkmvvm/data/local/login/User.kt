@@ -2,8 +2,9 @@ package com.imaginato.homeworkmvvm.data.local.login
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.imaginato.homeworkmvvm.exts.USER
 
-@Entity(tableName = "User")
+@Entity(tableName = USER)
 data class User(
     @PrimaryKey
     val userId: String,

@@ -1,7 +1,6 @@
 package com.imaginato.homeworkmvvm.ui.login
 
 import android.os.Bundle
-import android.view.View
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import com.imaginato.homeworkmvvm.databinding.ActivityLoginBinding
@@ -31,15 +30,6 @@ class LoginActivity : BaseActivity() {
     }
 
     private fun initObserve() {
-        viewModel.progress.observe(this) {
-           if (it) {
-               binding.pbLoading.visibility = View.VISIBLE
-           }
-            else {
-               binding.pbLoading.visibility = View.GONE
-           }
-        }
-
         viewModel.uiMessage.observe(this) {
             if (it != -1)
                 Toast.makeText(this,resources.getString(it),Toast.LENGTH_SHORT).show()

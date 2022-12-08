@@ -6,6 +6,10 @@ const val LOG_TYPE_REQUEST = "log request:"
 const val LOG_TYPE_RESPONSE = "log response:"
 const val LOG_TYPE_ERROR = "log error:"
 const val LOG_TYPE_INFO = "log info:"
+const val USER = "User"
+const val USER_DATABASE = "USER_DATABASE"
+const val VERSION = 1
+const val LOGIN = "login"
 
 fun String.printLog(type: String, tag: String) {
     when (type) {

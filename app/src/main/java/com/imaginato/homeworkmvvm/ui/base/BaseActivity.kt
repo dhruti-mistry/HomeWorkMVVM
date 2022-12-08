@@ -34,15 +34,15 @@ open class BaseActivity: AppCompatActivity() {
             }
         }
         mViewModel.mError.observe(this) {
-            Toast.makeText(this, it ?: "Something went wrong", Toast.LENGTH_LONG).show()
+            Toast.makeText(this, it ?: resources.getString(R.string.something_went_wrong), Toast.LENGTH_LONG).show()
         }
         mViewModel.isUnauthorized.observe(this) {
             if (it == true) {
                 // clear shared pref
                 AlertDialog.Builder(this)
                     .setTitle(getString(R.string.app_name))
-                    .setMessage("Unauthorized")
-                    .setPositiveButton("OK") { dialog, _ ->
+                    .setMessage(resources.getString(R.string.unauthorized))
+                    .setPositiveButton(resources.getString(R.string.ok)) { dialog, _ ->
                         dialog.dismiss()
                     }.setCancelable(false).show()
             }

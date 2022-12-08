@@ -2,14 +2,13 @@ package com.imaginato.homeworkmvvm.domain
 
 import android.content.Context
 import androidx.room.Room
-import androidx.room.migration.Migration
-import androidx.sqlite.db.SupportSQLiteDatabase
 import com.google.gson.Gson
 import com.imaginato.homeworkmvvm.BuildConfig
 import com.imaginato.homeworkmvvm.R
 import com.imaginato.homeworkmvvm.data.local.login.UserDatabase
 import com.imaginato.homeworkmvvm.data.remote.login.LoginApi
 import com.imaginato.homeworkmvvm.data.remote.login.NetworkErrorInterceptor
+import com.imaginato.homeworkmvvm.exts.USER_DATABASE
 import com.imaginato.homeworkmvvm.ui.base.IApp
 import dagger.Module
 import dagger.Provides
@@ -26,7 +25,7 @@ import javax.inject.Singleton
 
 @InstallIn(SingletonComponent::class)
 @Module
-object IModule {
+object NetworkModule {
 
     @Provides
     @Singleton
@@ -79,7 +78,7 @@ object IModule {
         @ApplicationContext app: Context
     ) = Room.databaseBuilder(
         app, UserDatabase::class.java,
-        "USER_DATABASE"
+        USER_DATABASE
     ).allowMainThreadQueries().build()
 
     @Singleton

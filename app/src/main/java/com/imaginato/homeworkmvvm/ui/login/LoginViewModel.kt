@@ -17,18 +17,16 @@ import javax.inject.Inject
 @HiltViewModel
 class LoginViewModel @Inject constructor(private val repository: LoginDataRepository, private val userDao: UserDao) : BaseViewModel()  {
     var resultLiveData: MutableLiveData<LoginResponse> = MutableLiveData()
-    var progress: MutableLiveData<Boolean> = MutableLiveData()
     var uiMessage: MutableLiveData<Int> = MutableLiveData(-1)
-
 
     private var loginRequest = LoginRequest()
 
     fun isDataValid(username: String, password: String):Boolean {
-        if (username.isNullOrEmpty()) {
+        if (username.isEmpty()) {
             uiMessage.postValue(R.string.add_username)
             return false
         }
-        if (password.isNullOrEmpty()) {
+        if (password.isEmpty()) {
             uiMessage.postValue(R.string.add_password)
             return false
         }
@@ -42,7 +40,6 @@ class LoginViewModel @Inject constructor(private val repository: LoginDataReposi
 
     fun doLogin(username: String,password: String) {
         mProgress.postValue("Loading")
-//        progress.postValue(true)
         loginRequest.userName = username
         loginRequest.password = password
 
@@ -51,7 +48,7 @@ class LoginViewModel @Inject constructor(private val repository: LoginDataReposi
             override fun onFailure(call: Call<LoginResponse?>, t: Throwable) {
                 mProgress.postValue("")
 
-                mError.postValue(t.localizedMessage.toString())
+                mError.postValue(t.localizedMessage?.toString())
             }
 
             override fun onResponse(

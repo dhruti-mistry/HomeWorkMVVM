@@ -8,5 +8,8 @@
     <string name="add_password">Please add password.</string>
     <string name="invalid_password">Invalid Password</string>
     <string name="no_internet_connection">No internet</string>
+    <string name="something_went_wrong">Something went wrong</string>
+    <string name="unauthorized">Unauthorized</string>
+    <string name="ok">OK</string>
 
 </resources>

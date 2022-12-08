@@ -29,7 +29,7 @@ class LoginViewModelUnitTest {
     private var userDao: UserDao = mock {}
     private lateinit var repository: LoginDataRepository
     private lateinit var viewModel: LoginViewModel
-    var loginResponse: retrofit2.Call<LoginResponse?> = mock {}
+    private var loginResponse: retrofit2.Call<LoginResponse?> = mock {}
 
     @Before
     fun setUp() {

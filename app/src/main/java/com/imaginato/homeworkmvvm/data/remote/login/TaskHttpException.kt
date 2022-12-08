@@ -23,15 +23,4 @@ open class TaskHttpException(private val response: ErrorResponse) : IOException(
     class UnauthorizedException(response: ErrorResponse) : TaskHttpException(response)
     class UnprocessedAbleException(response: ErrorResponse) : TaskHttpException(response)
 
-    fun getErrorMessage(): String {
-        return if (response.code > 0) {
-            response.message?: NetworkErrorInterceptor.UNKNOWN_ERROR
-        } else {
-            NetworkErrorInterceptor.UNKNOWN_ERROR
-        }
-    }
-
-    fun isUnauthorizedException(): Boolean {
-        return this is UnauthorizedException
-    }
 }
