@@ -40,6 +40,11 @@ class LoginActivity : BaseActivity() {
            }
         }
 
+        viewModel.uiMessage.observe(this) {
+            if (it != -1)
+                Toast.makeText(this,resources.getString(it),Toast.LENGTH_SHORT).show()
+        }
+
         viewModel.resultLiveData.observe(this){
             Toast.makeText(this,it.errorMessage,Toast.LENGTH_SHORT).show()
         }
